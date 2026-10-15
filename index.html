@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>五上第4课 算法中的数据 · 课堂自学任务单</title>
+<style>
+:root{
+  --bg:#f4f7fb; --card:#ffffff; --ink:#1f2937; --sub:#5b6b7f; --line:#e4eaf2;
+  --blue:#1d6fe0; --amber:#e08b1d; --violet:#7c3aed; --green:#16a34a; --rose:#e1514f;
+  --ok:#16a34a; --bad:#e1514f;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:900px;margin:0 auto;padding:16px 16px 60px}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--card);border-radius:14px;padding:10px 14px;box-shadow:0 2px 8px rgba(30,60,100,.06)}
+.top .who{font-weight:700;font-size:15px}
+.top .sp{flex:1}
+.dots{display:flex;gap:6px;align-items:center}
+.dot{width:26px;height:26px;border-radius:50%;background:#eef2f8;color:var(--sub);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer}
+.dot.on{background:var(--blue);color:#fff}
+.dot.fin{background:var(--green);color:#fff}
+.mini{font-size:13px;color:var(--sub);border:1px solid var(--line);background:#fff;
+  border-radius:8px;padding:4px 10px;cursor:pointer}
+.card{background:var(--card);border-radius:16px;padding:20px 22px;margin-top:14px;
+  box-shadow:0 2px 10px rgba(30,60,100,.06)}
+.card h2{margin:0;font-size:21px;font-weight:700}
+.card h2 small{font-weight:400;font-size:14px;color:var(--sub);margin-left:8px}
+.lead{color:var(--sub);font-size:15px;margin:6px 0 14px}
+.ask{font-size:19px;font-weight:700;margin:16px 0 4px;line-height:1.6}
+.sub{color:var(--sub);font-size:15px;margin:0 0 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spacer{flex:1}
+.btn{border:none;border-radius:10px;padding:10px 18px;font-size:16px;font-weight:700;
+  cursor:pointer;background:#eef2f8;color:var(--ink)}
+.btn.pri{background:var(--blue);color:#fff}
+.btn.okG{background:var(--green);color:#fff}
+.btn.warm{background:var(--amber);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.chip{display:inline-block;padding:5px 12px;margin:3px;background:#f2f6fb;border:2px solid #dde5f0;
+  border-radius:10px;cursor:pointer;font-size:17px;user-select:none;transition:.15s}
+.chip:hover{border-color:#b9c8dc}
+.chip.sel{background:#e8f1ff;border-color:var(--blue);color:#0f4fa8;font-weight:700}
+.chip.ok{background:#e7f7ee;border-color:var(--ok);color:#14663a;font-weight:700}
+.chip.bad{background:#fdecec;border-color:var(--bad);color:#a1262a}
+.chip.ghost{opacity:.4}
+.step-row{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin:6px 0}
+.step-no{font-size:14px;color:var(--sub);width:52px;flex:none}
+.qbox{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;background:#fbfdff}
+.fb{border-radius:10px;padding:10px 14px;margin-top:10px;font-size:15px}
+.fb.ok{background:#e7f7ee;color:#14663a}
+.fb.bad{background:#fff6e8;color:#8a4b12}
+.fb.info{background:#eef3ff;color:#1a3f80}
+details.hint{margin-top:10px;font-size:14px;color:var(--sub)}
+details.hint summary{cursor:pointer;color:var(--blue)}
+input[type=text],input[type=number]{font-size:16px;padding:8px 10px;border:2px solid #dde5f0;
+  border-radius:10px;outline:none;font-family:inherit;color:var(--ink)}
+input:focus{border-color:var(--blue)}
+input.wide{width:100%}
+input.mini-n{width:74px;text-align:center}
+.pick{border:2px solid #dde5f0;background:#f2f6fb;border-radius:10px;padding:6px 14px;cursor:pointer;font-size:16px}
+.pick.on{background:#e8f1ff;border-color:var(--blue);color:#0f4fa8;font-weight:700}
+.pick.gone{opacity:.35;cursor:default}
+.blank{display:inline-block;min-width:96px;text-align:center;border-bottom:3px solid #c9d6e6;
+  padding:0 6px;margin:0 4px;color:var(--blue);font-weight:700;cursor:pointer}
+.blank.filled{border-bottom-color:var(--blue);background:#f4f8ff;border-radius:8px}
+.blank:hover{background:#eef4ff}
+.algo{background:#fbfdff;border:1px dashed #c9d6e6;border-radius:12px;padding:14px 16px;
+  font-size:17px;line-height:2.4}
+.slider{width:100%}
+.bigline{font-size:20px;font-weight:700;color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pair{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);
+  border-radius:10px;background:#fff;font-size:16px}
+.pair.ok{border-color:var(--ok);background:#f2fbf6;color:#14663a}
+.pair.wr{border-color:var(--bad);background:#fdf1f1}
+.pair b{font-weight:700}
+.starWrap{display:flex;gap:6px;font-size:22px;color:var(--amber)}
+.barRow{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:15px}
+.barOuter{flex:1;height:16px;background:#eef2f8;border-radius:8px;overflow:hidden}
+.barIn{height:100%;border-radius:8px;background:linear-gradient(90deg,#4f9bf5,#1d6fe0)}
+.tag{display:inline-block;font-size:13px;background:#eef2f8;color:var(--sub);
+  border-radius:20px;padding:2px 10px;margin:2px 4px 2px 0}
+.tag.warn{background:#fff6e8;color:#8a4b12}
+.tag.good{background:#e7f7ee;color:#14663a}
+.screen{display:none}
+.screen.on{display:block}
+.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{font-size:13px;padding:3px 10px;border-radius:20px;background:#eef2f8;color:var(--sub)}
+.pill.b{background:#e8f1ff;color:#0f4fa8}.pill.a{background:#fff2e0;color:#8a4b12}
+.pill.v{background:#f3ecff;color:#5b21b6}.pill.g{background:#e7f7ee;color:#14663a}
+.footnote{font-size:13px;color:var(--sub);margin-top:14px;text-align:center}
+@media print{
+  body{background:#fff}
+  .top,.no-print,.screen{display:none!important}
+  #s-report{display:block!important}
+  #report-wrap{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top no-print">
+    <span class="who" id="whoName">欢迎闯关</span>
+    <div class="dots" id="dots"></div>
+    <span class="sp"></span>
+    <span class="pill" id="starNow" style="display:none"></span>
+    <button class="mini" onclick="restart()">重新开始</button>
+  </div>
+
+  <!-- 开课页 -->
+  <div class="screen on" id="s-intro">
+    <div class="card">
+      <h2>第4课 算法中的数据<small>浙教版五上 P15–19</small></h2>
+      <p class="lead">今天闯 4 关，看看你能不能把「具体的数据」变成「变量」，让算法从<strong>解决一个问题</strong>变成<strong>解决一类问题</strong>。</p>
+      <div class="ask">先打个招呼</div>
+      <div class="row">
+        <input type="text" id="inKlass" placeholder="班级（如 五3班）" style="width:180px">
+        <input type="text" id="inName" placeholder="姓名" style="width:180px">
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" onclick="startGo()">开始闯关</button>
+        <span class="sp"></span>
+        <span class="pill" id="resumeTip" style="display:none"></span>
+      </div>
+      <details class="hint"><summary>小提示：什么是「数据」？</summary>
+        算法里的「数据」不只是数字，还包括材料、名称、数量、温度、时间……凡是被算法拿来用、算出来送出去的，都算数据。
+      </details>
+    </div>
+    <div class="card">
+      <div class="sub" style="margin:0"><strong>闯关地图</strong></div>
+      <div class="tag" style="font-size:15px">① 数据侦探</div>
+      <div class="tag" style="font-size:15px">② 变了与不变</div>
+      <div class="tag" style="font-size:15px">③ 变量名片</div>
+      <div class="tag" style="font-size:15px">④ 算法变形记</div>
+      <div class="sub" style="margin-top:8px">每关都会记下你的星星和思考痕迹，最后生成属于你的学习评价。</div>
+    </div>
+  </div>
+
+  <!-- 第1关 -->
+  <div class="screen" id="s-l1">
+    <div class="card">
+      <div class="hd"><h2>① 数据侦探</h2><span class="pill b">P16–17</span></div>
+      <p class="lead">煮冰糖雪梨茶的每一步里，哪些是算法要<strong>处理的数据</strong>？点它！</p>
+      <div id="l1toks"></div>
+      <div class="ask" style="margin-top:18px">还有吗？</div>
+      <p class="sub">生活中由算法<strong>生成</strong>的数据还有哪些？举一个例子。</p>
+      <input type="text" class="wide" id="l1example" placeholder="例：导航算出到学校要 15 分钟">
+      <div id="l1fb"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" onclick="l1Submit()">提交本关</button>
+        <button class="btn" onclick="go('intro')">返回</button>
+      </div>
+      <details class="hint"><summary>小提示</summary>数据是带着单位一起出现的哦：150克、1.5升、100摄氏度、10分钟；「洗净、切片、放入」是动作，不是数据。</details>
+    </div>
+  </div>
+
+  <!-- 第2关 -->
+  <div class="screen" id="s-l2">
+    <div class="card">
+      <div class="hd"><h2>② 变了与不变</h2><span class="pill a">P17</span></div>
+      <p class="lead">回到<strong>煮雪梨茶</strong>——就是第1关找过数据的那个算法。换一种口味、换一种煮法时，哪些数据需要<strong>跟着改</strong>？</p>
+      <div id="l2rows"></div>
+      <div class="ask" style="margin-top:18px">练一练：换一个算法<small style="font-weight:400;color:var(--sub);font-size:14px">　就是课本 P17 的问题</small></div>
+      <p class="sub">下面这个算法算的是<strong>平行四边形面积</strong>。课本问：「若要求解<strong>任意</strong>平行四边形的面积，算法中的哪些数据需要改变？」先拖一拖底和高，看看哪些数字在变。</p>
+      <div class="qbox">
+        <div class="row"><span style="width:40px">底</span><input class="slider" type="range" id="sl1" min="1" max="10" value="4" oninput="drawPara()"><b id="v1">4</b>cm</div>
+        <div class="row"><span style="width:40px">高</span><input class="slider" type="range" id="sl2" min="1" max="10" value="3" oninput="drawPara()"><b id="v2">3</b>cm</div>
+        <div class="bigline" style="margin-top:8px">开始 → 计算 <span id="pc1">4</span> × <span id="pc2">3</span> → 输出面积 <span id="pc3">12</span> cm² → 结束</div>
+      </div>
+      <p class="sub" style="margin-top:8px">拖过之后回答（<strong>可多选</strong>）：底和高变了，哪些数字会<strong>跟着变</strong>？</p>
+      <div class="row" id="paraq"></div>
+      <div class="ask">判断的诀窍是什么？</div>
+      <div id="l2q"></div>
+      <div id="l2fb"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" onclick="l2Submit()">提交本关</button>
+        <button class="btn" onclick="go('intro')">返回</button>
+      </div>
+      <details class="hint"><summary>小提示</summary>不要看数字大小，也不要猜——就问自己一句：「换一种情况时，这个数要不要跟着改？」</details>
+    </div>
+  </div>
+
+  <!-- 第3关 -->
+  <div class="screen" id="s-l3">
+    <div class="card">
+      <div class="hd"><h2>③ 变量名片</h2><span class="pill v">P18</span></div>
+      <p class="lead">变量有两张脸：<strong>变量名</strong>（名字）和<strong>变量值</strong>（当前装的数）。先配配对。</p>
+      <div class="row" style="align-items:flex-start">
+        <div style="flex:1" id="l3left"></div>
+        <div style="flex:1" id="l3right"></div>
+      </div>
+      <div id="l3fb1"></div>
+      <div class="ask" style="margin-top:18px">轮到你取名</div>
+      <div class="qbox" style="margin-bottom:10px">
+        <div class="sub" style="margin:0 0 4px"><strong>先看题</strong>——这是第3课的练习题，变量就是为它准备的：</div>
+        <div style="font-size:16px;line-height:2">学校举行<strong>合唱比赛</strong>，由 <strong>5 位评委</strong>对节目进行打分。节目的最终得分是 5 个分数的<strong>平均分</strong>。某个节目的评委打分分别为 91、90、88、92、89，请用流程图描述求该节目最终得分的算法。</div>
+      </div>
+      <p class="sub">要给这个算法准备 3 个变量，你会叫什么名字？先想一想每个变量要<strong>装什么</strong>（取好名字，第4关马上要用）。</p>
+      <div class="qbox">
+        <div style="margin-bottom:10px">每个评委打的分数 →
+          <input type="text" id="nm1" placeholder="点一下这里，再选下面的名字卡" style="width:230px"></div>
+        <div style="margin-bottom:10px">5个分数加起来的结果 →
+          <input type="text" id="nm2" placeholder="点一下这里，再选下面的名字卡" style="width:230px"></div>
+        <div>最后要得到的分数 →
+          <input type="text" id="nm3" placeholder="点一下这里，再选下面的名字卡" style="width:230px"></div>
+        <div class="sub" style="margin-top:10px">点一下上面的框，再从下面选一张<strong>名字卡</strong>填进去；也可以自己打字。记得：好名字 = 见名知义。</div>
+        <div class="row" id="nmpool"></div>
+      </div>
+      <div id="l3fb2"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" onclick="l3Submit()">提交本关</button>
+        <button class="btn" onclick="go('intro')">返回</button>
+      </div>
+      <details class="hint"><summary>小提示：取名建议</summary>见名知义——别人看到名字就知道它装的是什么。叫「总分」比叫「a」好，叫「平均分」比叫「x1」好。</details>
+    </div>
+  </div>
+
+  <!-- 第4关 -->
+  <div class="screen" id="s-l4">
+    <div class="card">
+      <div class="hd"><h2>④ 算法变形记</h2><span class="pill g">P19 练习</span></div>
+      <p class="lead">还是第3课那道<strong>合唱比赛评分</strong>的题（第3关取名时看过的）。当时的算法全用具体数据，现在请把<strong>具体数据换成变量</strong>，让它能算任意一次比赛的成绩。</p>
+      <div class="qbox" style="font-size:16px;line-height:2">
+        <b>题目：</b>学校举行合唱比赛，由 5 位评委对节目进行打分。节目的最终得分是 5 个分数的平均分。评委打分分别为 91、90、88、92、89。<br>
+        <b>当时的算法（具体版）：</b>依次输入 5 位评委的分数 91、90、88、92、89；把它们加起来得 450；用 450 除以 5，得到最终得分 90；输出 90。
+      </div>
+      <p class="sub">点下面的变量卡，再点虚线上的空，把它填进去。</p>
+      <div class="row" id="l4pool"></div>
+      <div class="algo" id="l4algo"></div>
+      <div id="l4fb"></div>
+      <div id="l4deep"></div>
+      <div id="l4trial"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn pri" onclick="l4Submit()">提交本关</button>
+        <button class="btn" onclick="go('intro')">返回</button>
+      </div>
+      <details class="hint"><summary>小提示</summary>同一个数据，前后两个地方要用同一个变量名；不要把运算符号或别人的数据填进来。</details>
+    </div>
+  </div>
+
+  <!-- 评价报告 -->
+  <div class="screen" id="s-report">
+    <button class="btn no-print" onclick="go('l4')" style="margin-top:14px">← 回去改一改</button>
+    <div class="card" id="report-wrap" style="margin-top:8px">
+      <div id="report"></div>
+      <div class="row no-print" style="margin-top:16px">
+        <button class="btn okG" onclick="dlPdf()" id="pdfBtn">下载 PDF 到本机</button>
+        <button class="btn" onclick="winPrint()">打印 / 另存为 PDF</button>
+        <button class="btn" onclick="restart()">重新开始</button>
+      </div>
+      <div class="footnote no-print" id="pdfTip">第4课《算法中的数据》课堂自学任务单 · 数据保存在本机，重新开始会清空</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ 课堂自学任务单 · 五上第4课 ============ */
+var KEY='g5u4_data_record_v1';
+var USE_STAR_PENALTY=true;          // 改为 false：只要最终答对就给 3 星
+var LEVELS=['l1','l2','l3','l4'];
+var LEVEL_NAME={'l1':'① 数据侦探','l2':'② 变了与不变','l3':'③ 变量名片','l4':'④ 算法变形记'};
+
+var _mem=null;
+function sg(k){try{return localStorage.getItem(k)}catch(e){return _mem}}
+function ss(k,v){try{localStorage.setItem(k,v)}catch(e){_mem=v}}
+var S=blank();
+function blank(){return{klass:'',name:'',start:'',lv:{}};}
+try{var r=JSON.parse(sg(KEY));if(r&&r.lv)S=r;}catch(e){}
+function save(){ss(KEY,JSON.stringify(S));}
+
+function $(id){return document.getElementById(id)}
+function stars(n){return '★★★'.slice(0,n)+'☆☆☆'.slice(0,3-n)}
+function totalStar(){var t=0;LEVELS.forEach(function(k){if(S.lv[k])t+=S.lv[k].stars});return t}
+function calcStar(fail){if(!USE_STAR_PENALTY)return 3;return fail<=2?3:(fail<=4?2:1)}
+function tip(){var t=new Date();return t.getFullYear()+'年'+(t.getMonth()+1)+'月'+t.getDate()+'日'}
+
+/* ---------- 导航 ---------- */
+function updateTop(){
+  $('whoName').textContent=(S.klass||'??')+' '+(S.name||'');
+  var html='';
+  LEVELS.forEach(function(k,i){
+    var cls=S.lv[k]?'fin':'';
+    html+='<span class="dot '+cls+'" onclick="jump(\''+k+'\')">'+(i+1)+'</span>';
+  });
+  $('dots').innerHTML=html;
+  var st=totalStar();
+  $('starNow').style.display=st?'':'none';
+  $('starNow').textContent='已得 '+st+'/12 星';
+}
+function go(id){
+  var arr=['intro'].concat(LEVELS).concat(['report']);
+  arr.forEach(function(k){$('s-'+k).className='screen'+(k===id?' on':'')});
+  window.scrollTo(0,0);
+}
+function jump(k){
+  if(!S.lv[k]){go(k);return}
+  if(!confirm(LEVEL_NAME[k]+' 已经完成，要重做这一关吗？'))return;
+  delete S.lv[k];save();updateTop();go(k);initLevel(k);
+}
+function startGo(){
+  var k=$('inKlass').value.trim(),n=$('inName').value.trim();
+  if(!k||!n){alert('请填写班级和姓名，评价报告要用哦');return}
+  S.klass=k;S.name=n;if(!S.start)S.start=tip();save();updateTop();
+  var next=LEVELS.find(function(x){return !S.lv[x]});
+  go(next||'report');initLevel(next||'report');
+}
+function restart(){
+  if(!confirm('确定清空本机记录、重新开始吗？'))return;
+  ss(KEY,'');S=blank();save();
+  LEVELS.forEach(function(k){initLevel(k)});
+  $('inKlass').value='';$('inName').value='';
+  $('resumeTip').style.display='none';
+  go('intro');updateTop();
+}
+function clearDone(){
+  var c=document.querySelectorAll('.doneCard');
+  for(var i=0;i<c.length;i++)c[i].remove();
+}
+function restoreBtns(k){
+  var card=document.querySelector('#s-'+k+' .card');if(!card)return;
+  var bs=card.querySelectorAll('.btn');
+  for(var i=0;i<bs.length;i++){
+    if(bs[i].textContent.indexOf('已通过')>=0){bs[i].disabled=false;bs[i].textContent='提交本关'}
+  }
+}
+function initLevel(k){
+  clearDone();restoreBtns(k);
+  if(k==='l1')l1Init();else if(k==='l2')l2Init();else if(k==='l3')l3Init();
+  else if(k==='l4')l4Init();else if(k==='report')renderReport();
+}
+
+/* ---------- 第1关 ---------- */
+var L1=[
+ {toks:[['雪梨',1],['洗净',0],['切片',0]]},
+ {toks:[['放入',0],['150克',1],['雪梨',1]]},
+ {toks:[['加入',0],['10克',1],['冰糖',1]]},
+ {toks:[['加入',0],['1.5升',1],['水',1]]},
+ {toks:[['加热到',0],['100摄氏度',1]]},
+ {toks:[['水开后',0],['再煮',0],['10分钟',1]]}
+];
+var d1={sel:{},bad:{},fail:0,missSeen:{},badSeen:{}};
+function l1Init(){
+  d1={sel:{},bad:{},fail:0,missSeen:{},badSeen:{}};
+  var w=$('l1toks');w.innerHTML='';
+  L1.forEach(function(s,i){
+    var row=document.createElement('div');row.className='step-row';
+    row.innerHTML='<span class="step-no">步骤'+(i+1)+'</span>';
+    s.toks.forEach(function(t,j){
+      var b=document.createElement('span');b.className='chip';b.textContent=t[0];
+      b.onclick=function(){l1Tap(i,j,b,t)};
+      row.appendChild(b);
+    });
+    w.appendChild(row);
+  });
+  $('l1fb').innerHTML='';$('l1example').value=(S.lv.l1&&S.lv.l1.example)||'';
+}
+function l1Tap(i,j,node,t){
+  if(node.classList.contains('ok')||node.classList.contains('bad'))return;
+  if(t[1]){node.classList.add('ok');d1.sel[i+'-'+j]=1;node.style.animation='none'}
+  else{
+    node.classList.add('bad');d1.bad[i+'-'+j]=1;d1.badSeen[t[0]]=1;
+    $('l1fb').innerHTML='<div class="fb bad">「'+t[0]+'」是动作／状态，不是算法要处理的数据。再看看🍐旁边的数量、温度、时间。</div>';
+  }
+}
+function l1Submit(){
+  var miss=[];
+  L1.forEach(function(s,i){s.toks.forEach(function(t,j){
+    if(t[1]&&!d1.sel[i+'-'+j])miss.push(t[0]);
+  })});
+  var badN=Object.keys(d1.bad).length;
+  var ex=$('l1example').value.trim();
+  if(miss.length||badN){
+    d1.fail++;miss.forEach(function(m){d1.missSeen[m]=1});
+    var msg='<div class="fb bad">';
+    if(miss.length)msg+='还有 '+miss.length+' 个数据没找出来，再读一遍步骤～<br>';
+    if(badN)msg+='有 '+badN+' 个"不是数据"的词被你点中了。<br>';
+    msg+='改一改，再来一次！</div>';
+    $('l1fb').innerHTML=msg;
+    var rows=$('l1toks').querySelectorAll('.chip.bad');
+    for(var k2=0;k2<rows.length;k2++){rows[k2].classList.remove('bad');}
+    d1.bad={};
+    return;
+  }
+  if(ex.length<4){$('l1fb').innerHTML='<div class="fb bad">写一句例子吧（至少4个字），比如"导航算出还要几分钟"。</div>';return}
+  S.lv.l1={stars:calcStar(d1.fail),fail:d1.fail,example:ex,
+    miss:Object.keys(d1.missSeen),badTouch:Object.keys(d1.badSeen)};
+  save();updateTop();finishCard('l1','数据侦探过关！找到全部 '+12+' 个数据（含材料、数量、温度、时间）。',ex);
+}
+/* ---------- 第2关 ---------- */
+var L2=[
+ {k:'雪梨用量 150克',chg:1,why:'想多吃就多放、想少放就少放，它会跟着变'},
+ {k:'冰糖用量 10克',chg:1,why:'口味不同，糖量跟着变'},
+ {k:'水的体积 1.5升',chg:1,why:'煮几碗就加几碗水，它会变'},
+ {k:'加热温度 100摄氏度',chg:0,why:'这台煮茶机总是加热到 100℃，它不变'},
+ {k:'再煮时间 10分钟',chg:1,why:'料多就多煮一会儿，它会变'}
+];
+var L2Q={t:'判断"会不会变"，最好的办法是问自己——',opts:['数字大的才会变','换一种情况时，这个数要不要跟着改','老师没说过，就猜一个'],ans:1};
+var PARA=[['底',1],['高',1],['面积',1],['乘号 ×',0]];
+var d2={pick:{},fail:0,q:-1,tried:0,wrongSeen:{},para:{}};
+function drawPara(){
+  var a=+$('sl1').value,b=+$('sl2').value;
+  $('v1').textContent=a;$('v2').textContent=b;
+  $('pc1').textContent=a;$('pc2').textContent=b;$('pc3').textContent=a*b;
+  d2.tried=1;
+}
+function l2Init(){
+  d2={pick:{},fail:0,q:-1,tried:0,wrongSeen:{},para:{}};
+  drawPara();
+  var w=$('l2rows');w.innerHTML='';
+  L2.forEach(function(it,i){
+    var row=document.createElement('div');row.className='row';
+    row.style.margin='8px 0';row.id='l2r'+i;
+    row.innerHTML='<span style="width:190px;font-size:16px">'+it.k+'</span>';
+    [['会变',1],['不变',0]].forEach(function(o){
+      var b=document.createElement('span');b.className='pick';b.textContent=o[0];
+      b.onclick=function(){
+        row.querySelectorAll('.pick').forEach(function(x){x.classList.remove('on')});
+        b.classList.add('on');d2.pick[i]=o[1];$('l2fb').innerHTML='';
+      };
+      row.appendChild(b);
+    });
+    w.appendChild(row);
+  });
+  var q=$('l2q');q.innerHTML='<div class="sub">'+L2Q.t+'</div>';
+  L2Q.opts.forEach(function(o,i){
+    var b=document.createElement('div');b.className='chip';b.textContent=String.fromCharCode(65+i)+' '+o;
+    b.style.display='block';b.style.width='fit-content';
+    b.onclick=function(){
+      q.querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel')});
+      b.classList.add('sel');d2.q=i;
+    };
+    q.appendChild(b);
+  });
+  d2.para={};
+  var pq=$('paraq');pq.innerHTML='';
+  PARA.forEach(function(o,i){
+    var b=document.createElement('span');b.className='pick';b.textContent=o[0];
+    b.onclick=function(){
+      if(b.classList.contains('on')){b.classList.remove('on');delete d2.para[i]}
+      else{b.classList.add('on');d2.para[i]=o[1]}
+      $('l2fb').innerHTML='';
+    };
+    pq.appendChild(b);
+  });
+  $('l2fb').innerHTML='';
+}
+function l2Submit(){
+  var bad=0;
+  L2.forEach(function(it,i){
+    var row=$('l2r'+i);
+    row.querySelectorAll('.pick').forEach(function(x){x.classList.remove('on')});
+    if(d2.pick[i]===it.chg){
+      row.querySelectorAll('.pick')[it.chg?0:1].classList.add('on');
+    }else{
+      bad++;d2.wrongSeen[it.k]=1;row.classList.add('wr');
+    }
+  });
+  var unSel=L2.filter(function(it,i){return d2.pick[i]===undefined}).length;
+  var paraTouched=Object.keys(d2.para).length>0;
+  var paraOk=PARA.every(function(o,i){return (d2.para[i]||0)===o[1]});
+  var qWrong=(d2.q!==L2Q.ans);
+  if(bad||unSel||qWrong||!paraOk||!paraTouched){
+    d2.fail++;
+    if(!paraOk||!paraTouched)d2.wrongSeen['平行四边形（哪些数字跟着变）']=1;
+    var msg='<div class="fb bad">还差一点点：<br>';
+    L2.forEach(function(it,i){
+      if(d2.pick[i]===undefined)msg+='· '+it.k+'：还没选<br>';
+      else if(d2.pick[i]!==it.chg)msg+='· '+it.k+'：'+it.why+'<br>';
+    });
+    if(!paraTouched)msg+='· 平行四边形那题：先拖一拖滑块，再点选答案<br>';
+    else if(!paraOk)msg+='· 平行四边形那题：跟着变的是「底、高、面积」——乘法规则「×」是不变的<br>';
+    if(qWrong)msg+='· 判断诀窍那题再想想：正确的问法是「'+L2Q.opts[L2Q.ans]+'」<br>';
+    msg+='改完再来！</div>';
+    $('l2fb').innerHTML=msg;return;
+  }
+  L2.forEach(function(it,i){$('l2r'+i).classList.remove('wr')});
+  S.lv.l2={stars:calcStar(d2.fail),fail:d2.fail,q:d2.q,wrong:Object.keys(d2.wrongSeen)};
+  save();updateTop();finishCard('l2','变了与不变过关！只有会变的数据才需要做成变量——这一步就叫「抽象」。','');
+}
+/* ---------- 第3关 ---------- */
+var PAIRS=[['雪梨变量','150'],['冰糖变量','10'],['底','4'],['高','3'],['面积','12']];
+var NM=[{id:'nm1',tip:'每个评委打的分数',kw:['分','score','评委','打分'],label:'单个评委的分数',ph:'例：评委分数'},
+        {id:'nm2',tip:'5个分数加起来的结果',kw:['总','和','sum','zong'],label:'总分',ph:'例：总分'},
+        {id:'nm3',tip:'最后要求的平均分',kw:['平均','均','avg','pj','最终','得分'],label:'平均分',ph:'例：平均分'}];
+var d3={match:{},cur:null,curNode:null,curIn:null,fail:0,nameFail:0};
+var NMCARDS=['评委分数','总分','平均分','分数','成绩','x1','a1'];
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function l3Init(){
+  d3={match:{},cur:null,curNode:null,curIn:null,fail:0,nameFail:0};
+  var left=$('l3left'),right=$('l3right');left.innerHTML='';right.innerHTML='';
+  var vals=shuffle(PAIRS.map(function(p){return p[1]}));
+  PAIRS.forEach(function(p,i){
+    var n=document.createElement('div');n.className='chip';n.style.display='block';n.style.width='90%';
+    n.textContent=p[0]+'（值 = ?）';n.dataset.i=i;
+    n.onclick=function(){
+      left.querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel')});
+      n.classList.add('sel');d3.cur=i;d3.curNode=n;
+    };
+    left.appendChild(n);
+    var v=document.createElement('div');v.className='chip';v.style.display='block';v.style.width='80%';
+    v.textContent=vals[i];v.id='val'+i;
+    v.onclick=function(){l3Pick(vals[i],v)};
+    right.appendChild(v);
+  });
+  var pool=$('nmpool');pool.innerHTML='';
+  NMCARDS.forEach(function(c){
+    var b=document.createElement('span');b.className='chip';b.textContent=c;
+    b.onclick=function(){
+      if(!d3.curIn){$('l3fb2').innerHTML='<div class="fb info">先点一下上面某个输入框，再点名字卡。</div>';return}
+      $(d3.curIn).value=c;$('l3fb2').innerHTML='';
+    };
+    pool.appendChild(b);
+  });
+  NM.forEach(function(o){
+    var inp=$(o.id);
+    inp.value=(S.lv.l3&&S.lv.l3.names&&S.lv.l3.names[o.id])||'';
+    inp.onfocus=function(){d3.curIn=o.id};
+  });
+  $('l3fb1').innerHTML='';$('l3fb2').innerHTML='';
+}
+function l3Pick(val,node){
+  if(d3.cur===null){$('l3fb1').innerHTML='<div class="fb info">先点左边的变量名，再点它的值。</div>';return}
+  var nameNode=d3.curNode;
+  if(val===PAIRS[d3.cur][1]){
+    node.classList.add('ok');nameNode.classList.remove('sel');
+    var p=document.createElement('div');p.className='pair ok';
+    p.innerHTML='<span>'+PAIRS[d3.cur][0]+'</span><b>'+val+'</b>';
+    nameNode.replaceWith(p);node.style.display='none';
+    d3.match[d3.cur]=1;d3.cur=null;d3.curNode=null;
+    if(Object.keys(d3.match).length===PAIRS.length)
+      $('l3fb1').innerHTML='<div class="fb ok">全配对成功！名字是"盒子上的标签"，值是"盒子里装的东西"。</div>';
+    else $('l3fb1').innerHTML='<div class="fb ok">对啦，继续。</div>';
+  }else{
+    node.classList.add('bad');d3.fail++;
+    $('l3fb1').innerHTML='<div class="fb bad">值装不进去。想想：'+val+' 应该是谁的值？换个变量名试试。</div>';
+    setTimeout(function(){node.classList.remove('bad')},600);
+  }
+}
+function l3Submit(){
+  if(Object.keys(d3.match).length<PAIRS.length){
+    $('l3fb2').innerHTML='<div class="fb bad">先把 5 组变量名和变量值配对完成。</div>';return}
+  var names={},bad=[];
+  NM.forEach(function(o){
+    var v=$(o.id).value.trim();
+    names[o.id]=v;
+    if(!v){bad.push(o.tip+' 还没取名');return}
+    var low=v.toLowerCase(),hit=o.kw.some(function(k){return low.indexOf(k)>=0});
+    if(!hit)bad.push('「'+v+'」这个名字，别人不太看得出它装的是什么');
+  });
+  if(bad.length){
+    d3.nameFail++;d3.fail++;
+    $('l3fb2').innerHTML='<div class="fb bad">'+bad.join('<br>')+'<br>改一改名字再提交～</div>';
+    return;
+  }
+  S.lv.l3={stars:calcStar(d3.fail),fail:d3.fail,names:names,ok:{}};
+  save();updateTop();
+  finishCard('l3','变量名片过关！见名知义的名字，别人一看就懂——这就是好表达。','');
+}
+/* ---------- 第4关 ---------- */
+var POOL=['分数','总分','平均分','评委人数','5','9分','评委姓名'];
+var A4=[
+ ['开始'],
+ ['依次输入5位评委的分数，记为',{b:'a'}],
+ ['把',{m:'a'},'全部加起来，得到',{b:'b'}],
+ ['用',{m:'b'},'除以',{b:'c'},'，算出',{b:'d'}],
+ ['输出',{m:'d'}],
+ ['结束']
+];
+var d4={fill:{},sel:null,fail:0,advanced:false,deep:null,trial:null,ran:false};
+function l4Init(){
+  d4={fill:{},sel:null,fail:0,advanced:false,deep:null,trial:null,ran:false};
+  l4DrawPool();l4DrawAlgo();
+  $('l4fb').innerHTML='';$('l4deep').innerHTML='';$('l4trial').innerHTML='';
+}
+function l4DrawPool(){
+  var w=$('l4pool');w.innerHTML='';
+  POOL.forEach(function(c){
+    if(d4.fill.a===c||d4.fill.b===c||d4.fill.c===c||d4.fill.d===c)return;
+    var b=document.createElement('span');b.className='chip';b.textContent=c;
+    b.onclick=function(){
+      w.querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel')});
+      b.classList.add('sel');d4.sel=c;
+    };
+    w.appendChild(b);
+  });
+}
+function l4DrawAlgo(){
+  var w=$('l4algo'),html='';
+  A4.forEach(function(line){
+    html+='<div>';
+    line.forEach(function(p){
+      if(typeof p==='string'){html+=p;return}
+      if(p.m){
+        var mv=d4.fill[p.m];
+        html+=' <span style="color:'+(mv?'#1d6fe0':'#c9d6e6')+';font-weight:700">'+(mv||'＿＿＿')+'</span> ';
+      }
+      if(p.b){
+        var bv=d4.fill[p.b];
+        html+=' <span class="blank'+(bv?' filled':'')+'" data-b="'+p.b+'">'+(bv||'填这里')+'</span> ';
+      }
+    });
+    html+='</div>';
+  });
+  w.innerHTML=html;
+  var bs=w.querySelectorAll('[data-b]');
+  for(var i=0;i<bs.length;i++){bs[i].onclick=function(){l4Place(this.getAttribute('data-b'))}}
+}
+function l4Place(id){
+  if(d4.fill[id]){var old=d4.fill[id];delete d4.fill[id];d4.sel=null;l4DrawPool();l4DrawAlgo();return}
+  if(!d4.sel){$('l4fb').innerHTML='<div class="fb info">先点一张变量卡，再点空格。</div>';return}
+  d4.fill[id]=d4.sel;d4.sel=null;l4DrawPool();l4DrawAlgo();$('l4fb').innerHTML='';
+}
+function l4Submit(){
+  if(S.lv.l4){$('l4fb').innerHTML='<div class="fb ok">本关已通过 ✓ 往下完成「试试你的算法」，就能生成学习评价。</div>';return}
+  var A=d4.fill;
+  if(!(A.a&&A.b&&A.c&&A.d)){$('l4fb').innerHTML='<div class="fb bad">还有空格没填完～</div>';return}
+  var wrong=[];
+  if(A.a!=='分数')wrong.push('第1步：输入的每个评委的分数，应该记为「分数」类变量');
+  if(A.b!=='总分')wrong.push('第2步：加起来的结果叫「总分」');
+  if(['5','评委人数'].indexOf(A.c)<0)wrong.push('第3步：除以的是评委人数（本题固定为 5）');
+  if(A.d!=='平均分')wrong.push('第4步：最后算出并输出的是「平均分」');
+  if(wrong.length){d4.fail++;$('l4fb').innerHTML='<div class="fb bad">'+wrong.join('<br>')+'<br>再改改！</div>';return}
+  d4.advanced=(A.c==='评委人数');
+  S.lv.l4={stars:calcStar(d4.fail),fail:d4.fail,fill:{a:A.a,b:A.b,c:A.c,d:A.d},
+    advanced:d4.advanced,deep:d4.deep,trial:d4.trial,ran:d4.ran};
+  save();updateTop();l4After();
+  finishCard('l4','算法变形记过关！具体数字变成了变量，这份算法从此能算任意一次比赛。'
+    +'<br><b>最后一步：</b>在下面「试试你的算法」里换一组分数点「运行算法」，然后点绿色按钮生成学习评价。','');
+}
+function l4After(){
+  if(d4.advanced){
+    $('l4deep').innerHTML='<div class="fb ok">你把「5」换成了「评委人数」变量——厉害！这样算法连 7 位评委、10 位评委的比赛都能算了，这就是「解决一类问题」。</div>';
+  }else{
+    $('l4deep').innerHTML='<div class="qbox"><div class="ask" style="margin:0 0 6px">再想一步</div>'
+      +'<p class="sub">如果下次比赛来了 <b>7 位</b>评委，这里写死的「5」该怎么改才最好？</p>'
+      +'<div class="row" id="deepopts"></div><div id="deepfb"></div></div>';
+    [['还是就把 5 改成 7',0],['换成一个叫「评委人数」的变量',1]].forEach(function(o){
+      var b=document.createElement('span');b.className='chip';b.textContent=o[0];
+      b.onclick=function(){
+        $('deepopts').querySelectorAll('.chip').forEach(function(x){x.classList.remove('sel')});
+        b.classList.add('sel');d4.deep=o[1];
+        $('deepfb').innerHTML=o[1]
+          ?'<div class="fb ok">对！用变量装人数，算法字没改，却能处理任意人数——这才是「一类问题」的算法。</div>'
+          :'<div class="fb bad">改是可以改，但每换一次人数就要重写算法。用变量装人数会更省事，再想想～</div>';
+        if(S.lv.l4){S.lv.l4.deep=o[1];save()}
+      };
+      $('deepopts').appendChild(b);
+    });
+  }
+  $('l4trial').innerHTML=''
+    +'<div class="ask" style="margin-top:18px">试试你的算法</div>'
+    +'<p class="sub">换一组分数，看你改好的算法还能用吗？</p>'
+    +'<div class="row" id="scores"></div>'
+    +'<div class="row" style="margin-top:10px"><button class="btn okG" onclick="l4Run()">运行算法</button></div>'
+    +'<div id="runfb"></div>';
+  var w=$('scores');
+  for(var i=1;i<=5;i++){
+    var inp=document.createElement('input');inp.type='number';inp.min='0';inp.max='10';inp.step='0.5';
+    inp.className='mini-n';inp.placeholder='评委'+i;w.appendChild(inp);
+  }
+}
+function l4Run(){
+  var ins=$('scores').querySelectorAll('input'),a=[],ok=true;
+  ins.forEach(function(x){var v=parseFloat(x.value);if(isNaN(v)){ok=false;return}a.push(v)});
+  if(!ok||a.length<5){$('runfb').innerHTML='<div class="fb bad">5 位评委的分数都要填哦。</div>';return}
+  var sum=a.reduce(function(x,y){return x+y},0),avg=(sum/a.length).toFixed(1);
+  d4.ran=true;d4.trial={s:a,sum:sum,avg:avg};
+  if(S.lv.l4){S.lv.l4.ran=true;S.lv.l4.trial=d4.trial;save()}
+  $('runfb').innerHTML='<div class="fb ok">总分 = '+sum.toFixed(1)+'　平均分 = '+avg
+    +'<br>算法一个字没改，只是换了数据，就得出新结果——这就是<b>解决一类问题</b>的算法！</div>';
+  if(!$('runfb').querySelector('.btn')){
+    var b=document.createElement('button');b.className='btn pri';b.style.marginTop='10px';
+    var done=LEVELS.every(function(x){return S.lv[x]});
+    if(done){b.textContent='完成试算！看我的学习评价 →';b.onclick=function(){go('report');renderReport()}}
+    else{b.textContent='完成试算 ✓ 回地图看看还剩哪关';b.onclick=function(){go('intro')}}
+    $('runfb').appendChild(b);
+  }
+}
+function finishCard(k,msg,ex){
+  var host=document.querySelector('#s-'+k+' .card');
+  var old=host.querySelector('.doneCard');if(old)old.remove();
+  var bs=host.querySelectorAll('.btn');
+  for(var i=0;i<bs.length;i++){
+    if(bs[i].textContent.indexOf('提交')>=0){bs[i].disabled=true;bs[i].textContent='已通过 ✓'}
+  }
+  var box=document.createElement('div');box.className='fb ok doneCard';
+  box.innerHTML='<div style="font-size:22px;color:#e08b1d">'+stars(S.lv[k].stars)+'</div>'+msg
+    +(ex?'<div style="margin-top:6px">你举的例子：'+ex+'</div>':'');
+  var done=LEVELS.every(function(x){return S.lv[x]});
+  var b=document.createElement('button');b.className='btn pri';b.style.marginTop='10px';
+  if(done){
+    b.textContent='四关全通！看我的学习评价 →';b.onclick=function(){go('report');renderReport()};
+  }else{
+    var nx=LEVELS[LEVELS.indexOf(k)+1];
+    b.textContent='下一关：'+LEVEL_NAME[nx];b.onclick=function(){go(nx);initLevel(nx)};
+  }
+  box.appendChild(b);
+  var back=document.createElement('button');back.className='btn';back.style.marginLeft='8px';
+  back.textContent='回地图';back.onclick=function(){go('intro')};box.appendChild(back);
+  host.appendChild(box);
+  try{box.scrollIntoView({behavior:'smooth',block:'end'})}catch(e){}
+}
+/* ---------- 评价报告 ---------- */
+function levelBar(k){
+  var L=S.lv[k]||{stars:0,fail:0};
+  return '<div class="barRow"><span style="width:96px">'+LEVEL_NAME[k]+'</span>'
+    +'<span class="barOuter"><span class="barIn" style="width:'+(L.stars/3*100)+'%"></span></span>'
+    +'<span style="width:80px;text-align:right;color:#e08b1d;font-size:14px">'+stars(L.stars)+'</span></div>';
+}
+function renderReport(){
+  updateTop();
+  var done=LEVELS.every(function(k){return S.lv[k]});
+  if(!done){
+    $('report').innerHTML='<div class="fb bad">还有关卡没完成：'
+      +LEVELS.filter(function(k){return !S.lv[k]}).map(function(k){return LEVEL_NAME[k]}).join('、')
+      +'</div><p class="sub">回到地图把它们做完，评价报告会更完整。</p>';
+    return;
+  }
+  var t=totalStar(),L1=S.lv.l1,L2=S.lv.l2,L3=S.lv.l3,L4=S.lv.l4;
+  var allFirst=LEVELS.every(function(k){return S.lv[k].fail===0});
+  /* 闯关足迹 */
+  var foot='';
+  LEVELS.forEach(function(k){
+    var L=S.lv[k];
+    var tags=[];
+    tags.push(L.fail===0?'<span class="tag good">一次通过</span>':'<span class="tag warn">重试 '+L.fail+' 次</span>');
+    if(k==='l1'&&L.miss&&L.miss.length)tags.push('<span class="tag warn">漏找：'+L.miss.join('、')+'</span>');
+    if(k==='l1'&&L.badTouch&&L.badTouch.length)tags.push('<span class="tag warn">误点：'+L.badTouch.join('、')+'</span>');
+    if(k==='l2'&&L.wrong&&L.wrong.length)tags.push('<span class="tag warn">曾判错：'+L.wrong.join('、')+'</span>');
+    if(k==='l2'&&L.q!==undefined)tags.push('<span class="tag '+(L.q===1?'good':'warn')+'">判断诀窍：'+(L.q===1?'答对':'再巩固')+'</span>');
+    if(k==='l3'&&L.names)tags.push('<span class="tag good">取名：'+NM.map(function(o){return (L.names[o.id]||'未取')}).join(' / ')+'</span>');
+    if(k==='l4')tags.push('<span class="tag '+(L.advanced?'good':'')+'">除以：'+(L.fill?L.fill.c:'-')+'</span>');
+    if(k==='l4'&&L.deep===1)tags.push('<span class="tag good">进阶：想到评委人数变量</span>');
+    if(k==='l4'&&L.ran)tags.push('<span class="tag good">试算：'+L.trial.sum.toFixed(1)+' → '+L.trial.avg+'</span>');
+    foot+='<div style="margin:8px 0"><b>'+LEVEL_NAME[k]+'</b><br>'+tags.join('')+'</div>';
+  });
+  /* 评语 */
+  var cm=[];
+  if(t>=11)cm.push('整节课的抽象思维非常稳：你能从算法里揪出数据，也能把数据变成变量。');
+  else if(t>=8)cm.push('你已经能看懂"数据→变量"这条主线了，个别地方再练一练就更扎实。');
+  else cm.push('这一课最难的是"从具体跳到一般"，你的步子迈出去了一部分，对照下面的提示再走一遍会更稳。');
+  if(L1.miss&&L1.miss.length)cm.push('找数据时注意：材料（雪梨、冰糖、水）也算数据，数量一定要连着单位一起看。');
+  if(L1.example)cm.push('你举的生活中算法生成的数据："'+L1.example+'"——这个例子说明你把眼睛对准生活了。');
+  if(L2.q!==1)cm.push('判断"会不会变"的办法请记住：就问一句"换一种情况时，这个数要不要跟着改"，不要凭感觉猜。');
+  if(L2.wrong&&L2.wrong.length)cm.push('你曾判断错的地方：'+L2.wrong.join('、')+'。对照当时的情境再想一遍，印象会更深。');
+  if(L3.names){
+    var nm=NM.map(function(o){return L3.names[o.id]}).join('、');
+    cm.push('你给变量取的名字是：'+nm+'，做到"见名知义"了吗？拿给同桌看看，他能不能猜出装的是什么。');
+  }
+  if(L4.advanced)cm.push('你主动把"5"换成了"评委人数"变量——这已经是"用变量解决一类问题"的思路了，很棒。');
+  else if(L4.deep===1)cm.push('面对"7位评委"的追问，你想到了用变量装人数，说明抽象这一步你已经跨过去了。');
+  else cm.push('还差一步：当"评委人数"也可能变的时候，把它也做成变量，算法就能一直用下去。');
+  if(!allFirst)cm.push('报告里的"重试次数"不是扣分，是帮你标记：哪几个地方值得再看一眼。');
+  var html=''
+   +'<div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">'
+   +'<h2 style="margin:0">学习评价报告</h2>'
+   +'<span class="pill">第4课 算法中的数据</span></div>'
+   +'<div class="sub">'+S.klass+'　'+S.name+'　'+tip()+'</div>'
+   +'<div style="font-size:15px;margin:6px 0 10px">总星数 <b style="font-size:24px;color:#e08b1d">'+t+'</b> / 12　'
+   + (t>=11?'评级：优秀':(t>=8?'评级：良好':(t>=5?'评级：合格':'评级：再接再厉')))+'</div>'
+   +'<div class="ask" style="margin-top:6px">四个维度表现</div>'
+   + LEVELS.map(levelBar).join('')
+   +'<div class="ask" style="margin-top:16px">闯关足迹</div>'+foot
+   +'<div class="ask" style="margin-top:16px">你的作品</div>'
+   +'<div class="qbox">'
+   +'<div><b>生活中的数据：</b>'+(L1.example||'未填写')+'</div>'
+   +'<div style="margin-top:6px"><b>变量取名：</b>'+NM.map(function(o){return o.tip+' → 「'+(L3.names?L3.names[o.id]:'未取')+'」'}).join('，')+'</div>'
+   +'<div style="margin-top:6px"><b>改写后的算法：</b><br>开始 → 输入分数：'+L4.fill.a+' → 加起来：'
+   +L4.fill.b+' → 用'+L4.fill.b+' ÷ '+L4.fill.c+' = '+L4.fill.d+' → 输出'+L4.fill.d+' → 结束</div>'
+   +(L4.ran?'<div style="margin-top:6px"><b>试算：</b>分数 '+L4.trial.s.join('、')+'，总分 '+L4.trial.sum.toFixed(1)+'，平均分 '+L4.trial.avg+'</div>':'')
+   +'</div>'
+   +'<div class="ask" style="margin-top:16px">老师的话（自动生成）</div>'
+   +'<div class="fb info">'+cm.join('<br>')+'</div>'
+   +'<div class="sub" style="margin-top:10px">评价依据：第4课教学目标①辨识算法中的数据（信息意识）②常量与变量辨析（抽象）③变量名·变量值与命名（表达）④用变量改写算法（迁移）。</div>';
+  $('report').innerHTML=html;
+}
+/* ---------- 导出 ---------- */
+function winPrint(){window.print()}
+function fn(){
+  return '算法中的数据_学习评价_'+(S.klass||'')+(S.name||'')+'.pdf';
+}
+function dlPdf(){
+  var el=$('report-wrap'),btn=$('pdfBtn');
+  if(typeof html2pdf==='undefined'){
+    if(confirm('没能加载导出组件（可能没联网）。要用系统打印面板导出 PDF 吗？\n在打印窗口里选择"另存为 PDF"。'))winPrint();
+    return;
+  }
+  btn.disabled=true;btn.textContent='正在生成…';
+  html2pdf().set({
+    margin:[10,10],filename:fn(),image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,backgroundColor:'#ffffff',windowWidth:820},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['avoid-all']}
+  }).from(el).save().then(function(){
+    btn.disabled=false;btn.textContent='下载 PDF 到本机';
+    $('pdfTip').textContent='已导出：'+fn()+'（保存在浏览器默认下载文件夹）';
+  }).catch(function(e){
+    btn.disabled=false;btn.textContent='下载 PDF 到本机';
+    if(confirm('导出遇到问题，改用系统打印面板吗？'))winPrint();
+  });
+}
+/* ---------- 启动 ---------- */
+LEVELS.forEach(function(k){initLevel(k)});
+if(S.klass&&S.name){
+  $('inKlass').value=S.klass;$('inName').value=S.name;
+  var fin=LEVELS.filter(function(k){return S.lv[k]}).length;
+  if(fin>0){$('resumeTip').style.display='';$('resumeTip').textContent='上次已完成 '+fin+'/4 关，继续吧！'}
+}
+updateTop();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
+</body>
+</html>
